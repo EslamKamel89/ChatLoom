@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Room;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,10 @@ class DatabaseSeeder extends Seeder {
         User::factory()->create([
             'name' => 'selia',
             'email' => 'selia@gmail.com',
+        ]);
+        Room::factory()->create([
+            'title' => 'main',
+            'slug' => 'main',
         ]);
     }
 }
