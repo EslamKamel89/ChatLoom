@@ -1,5 +1,19 @@
-<template>
-    <div></div>
-</template>
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { Room } from '@/types/app';
+import { Head } from '@inertiajs/vue3';
 
-<script setup lang="ts"></script>
+const breadcrumbs: BreadcrumbItem[] = [];
+defineProps<{
+    room: Room;
+}>();
+</script>
+
+<template>
+    <Head title="Show" />
+
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <div>{{ room.title }}</div>
+    </AppLayout>
+</template>

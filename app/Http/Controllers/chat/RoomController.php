@@ -21,6 +21,9 @@ class RoomController extends Controller {
     // }
 
     public function show(Room $room) {
+        return inertia('chat/room/Show', [
+            'room' => RoomResource::make($room)
+        ]);
     }
 
     // public function edit(Room $room) {

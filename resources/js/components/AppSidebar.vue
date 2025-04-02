@@ -3,15 +3,15 @@ import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { useAxios } from '@/composables/useAxios';
+import useRoomsIndex from '@/composables/useRoomsIndex';
 import { type NavItem } from '@/types';
-import { Room } from '@/types/app';
 import { Link } from '@inertiajs/vue3';
 import { LayoutGrid } from 'lucide-vue-next';
 import { computed, onMounted } from 'vue';
 import AppLogo from './AppLogo.vue';
-const { data: rooms, execute, loading } = useAxios<Room[]>({ baseURL: route('rooms.index') });
+const { rooms, execute, loading } = useRoomsIndex();
 onMounted(() => {
+    if (rooms?.value?.length && rooms?.value?.length > 0) return;
     execute();
 });
 const mainNavItems = computed(() => [
