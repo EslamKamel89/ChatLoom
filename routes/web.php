@@ -15,7 +15,8 @@ Route::get('dashboard', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('chat')->group(function () {
-        Route::resource('rooms', RoomController::class);
+        Route::resource('rooms', RoomController::class)
+            ->only(['show']);
     });
 });
 require __DIR__ . '/settings.php';
