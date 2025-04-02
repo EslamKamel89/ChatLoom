@@ -5,17 +5,29 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { useAxios } from '@/composables/useAxios';
 import { type NavItem } from '@/types';
+import { Room } from '@/types/app';
 import { Link } from '@inertiajs/vue3';
 import { LayoutGrid } from 'lucide-vue-next';
+import { computed, onMounted } from 'vue';
 import AppLogo from './AppLogo.vue';
-const { data: rooms, execute } = useAxios({ baseURL: route('rooms.index') });
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-];
+const { data: rooms, execute, loading } = useAxios<Room[]>({ baseURL: route('rooms.index') });
+onMounted(() => {
+    execute();
+});
+const mainNavItems = computed(() => [
+    // {
+    //     title: 'Dashboard',
+    //     href: '/dashboard',
+    //     icon: LayoutGrid,
+    // },
+    ...(rooms.value?.map((room) => {
+        return {
+            title: room.title,
+            href: route('rooms.show', room.slug),
+            icon: LayoutGrid,
+        };
+    }) || []),
+]);
 
 const footerNavItems: NavItem[] = [
     // {
@@ -46,7 +58,19 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <div v-if="loading">
+                <!--
+             <ul>
+                    <li v-for="i in 10" :key="i">
+                        <Skeleton class="h-4 w-52" />
+                    </li>
+                </ul>
+            -->
+                <div class="mt-10 flex h-full w-full items-center justify-center">
+                    <div class="text-center text-lg font-bold uppercase">Loading</div>
+                </div>
+            </div>
+            <NavMain v-else :items="mainNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
