@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -31,4 +31,7 @@ class Room extends Model {
         'title',
         'slug',
     ];
+    public function getRouteKeyName() {
+        return 'slug';
+    }
 }
