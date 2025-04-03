@@ -6,7 +6,6 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import useRoomsIndex from '@/composables/useRoomsIndex';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid } from 'lucide-vue-next';
 import { computed, onMounted } from 'vue';
 import AppLogo from './AppLogo.vue';
 const { rooms, execute, loading } = useRoomsIndex();
@@ -24,7 +23,7 @@ const mainNavItems = computed(() => [
         return {
             title: room.title,
             href: route('rooms.show', room.slug),
-            icon: LayoutGrid,
+            // icon: LayoutGrid,
         };
     }) || []),
 ]);
