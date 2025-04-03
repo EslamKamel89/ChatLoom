@@ -5,13 +5,13 @@ import { Room } from '@/types/app';
 import { Head } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [];
-defineProps<{
+const props = defineProps<{
     room: Room;
 }>();
 </script>
 
 <template>
-    <Head title="Show" />
+    <Head :title="props.room.title" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="relative flex h-screen w-full flex-col">
