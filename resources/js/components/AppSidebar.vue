@@ -59,16 +59,18 @@ const footerNavItems: NavItem[] = [
 
         <SidebarContent>
             <div v-if="loading">
-                <!--
-             <ul>
+                <ul>
                     <li v-for="i in 10" :key="i">
-                        <Skeleton class="h-4 w-52" />
+                        <div class="mx-4 my-3 flex animate-pulse">
+                            <div class="shrink-0">
+                                <span class="block size-5 rounded-full bg-gray-200 dark:bg-neutral-700"></span>
+                            </div>
+                            <div class="ms-4 mt-2 w-full">
+                                <li class="h-4 w-full rounded-full bg-gray-200 dark:bg-neutral-700"></li>
+                            </div>
+                        </div>
                     </li>
                 </ul>
-            -->
-                <div class="mt-10 flex h-full w-full items-center justify-center">
-                    <div class="text-center text-lg font-bold uppercase">Loading</div>
-                </div>
             </div>
             <NavMain v-else :items="mainNavItems" />
         </SidebarContent>

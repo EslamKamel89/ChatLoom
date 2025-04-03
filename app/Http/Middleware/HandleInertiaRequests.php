@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware {
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => [...$request->user()->toArray(), 'csrf' => csrf_token()],
+                'user' => [...($request->user()?->toArray() ?? []), 'csrf' => csrf_token()],
             ],
             'ziggy' => [
                 ...(new Ziggy)->toArray(),
