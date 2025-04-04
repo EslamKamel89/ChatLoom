@@ -3,6 +3,7 @@ import ChatFooter from '@/components/chat/ChatFooter.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Room } from '@/types/app';
+import pr from '@/utils/pr';
 import { Head } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [];
@@ -43,7 +44,7 @@ const props = defineProps<{
                 </main>
                 <!-- END Page Content -->
 
-                <ChatFooter />
+                <ChatFooter v-on:valid="(message) => pr(message, 'Message recieved in Show.vue')" />
             </div>
             <!-- END Page Container -->
         </div>
