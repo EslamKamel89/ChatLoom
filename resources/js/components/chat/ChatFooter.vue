@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useSidebar } from '../ui/sidebar';
 
 const message = ref('');
 const handleEnter = () => {
+    if (message.value.trim() == '') return;
     emit('valid', message.value);
+    message.value = '';
 };
 const emit = defineEmits<{
     valid: [message: string];
 }>();
+
+const { open } = useSidebar();
 </script>
 <template>
     <!-- Page Footer -->
-    <footer class="fixed bottom-0 mb-3 w-full items-center border-t border-slate-200/75 bg-white px-3 lg:w-[75%]">
-        <div class="container mx-auto flex h-20 items-center gap-2 px-4">
+    <footer class="fixed bottom-0 w-full border-t border-slate-200/75">
+        <div
+            class="container mx-auto mb-2 flex flex-col px-4 xl:max-w-7xl"
+            :class="{
+                '!mx-4 !max-w-[500px]': open,
+            }"
+        >
             <textarea
                 type="text"
                 v-model="message"

@@ -37,7 +37,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
                 '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             }"
         >
-            <div class="flex h-full w-full flex-col">
+            <div class="flex flex-col w-full h-full">
                 <slot />
             </div>
         </SheetContent>
@@ -45,7 +45,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
     <div
         v-else
-        class="group peer hidden md:block"
+        class="hidden group peer md:block"
         :data-state="state"
         :data-collapsible="state === 'collapsed' ? collapsible : ''"
         :data-variant="variant"
@@ -64,6 +64,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
                 )
             "
         />
+
         <div
             :class="
                 cn(
