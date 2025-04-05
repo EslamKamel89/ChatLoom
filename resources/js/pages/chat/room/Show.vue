@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import ChatFooter from '@/components/chat/ChatFooter.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
 import { Room } from '@/types/app';
 import pr from '@/utils/pr';
 import { Head } from '@inertiajs/vue3';
+import { storeToRefs } from 'pinia';
 
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
 }>();
+const { messages, page } = storeToRefs(useMessagesStore());
+pr(messages.value, 'Messages in Show.vue');
 </script>
 
 <template>
