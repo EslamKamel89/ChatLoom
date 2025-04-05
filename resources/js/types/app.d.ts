@@ -19,3 +19,7 @@ export interface Timezone {
     timezone_type: number;
     timezone: string;
 }
+
+export interface Message {
+    id: number;
+}
