@@ -22,4 +22,40 @@ export interface Timezone {
 
 export interface Message {
     id: number;
+    user_id: number;
+    room_id: number;
+    content: string;
+    created_at: DateTimeType;
+    updated_at: DateTimeType;
+    user: User;
+}
+
+export interface Pagination<T> {
+    data: T[];
+    links: Links;
+    meta: Meta;
+}
+
+export interface Links {
+    first: string;
+    last: string;
+    prev: string;
+    next: string;
+}
+
+export interface Meta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    links: Link[];
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
+export interface Link {
+    url?: string;
+    label: string;
+    active: boolean;
 }

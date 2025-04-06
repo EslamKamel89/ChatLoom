@@ -14,7 +14,7 @@ class MessageController extends Controller {
         $slug = $request->room;
         $room = Room::where('slug', $slug)->first();
         return MessageResource::collection(
-            $room->messages()->with(['user'])->get()
+            $room->messages()->with(['user'])->paginate(10)
         );
     }
 

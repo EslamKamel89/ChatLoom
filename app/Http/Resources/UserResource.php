@@ -16,8 +16,8 @@ class UserResource extends JsonResource {
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'created_at' => DateTimeResource::make($this->created_at),
-            'updated_at' => DateTimeResource::make($this->updated_at),
+            // 'created_at' => DateTimeResource::make($this->created_at),
+            // 'updated_at' => DateTimeResource::make($this->updated_at),
         ];
     }
 }
