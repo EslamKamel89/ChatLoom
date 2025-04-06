@@ -14,8 +14,10 @@ const props = defineProps<{
     room: Room;
 }>();
 const { messages, page } = storeToRefs(useMessagesStore());
-onMounted(() => {
-    messages.value = [];
+const { fetchMessages, resetMessages } = useMessagesStore();
+onMounted(async () => {
+    resetMessages();
+    await fetchMessages(props.room);
 });
 </script>
 

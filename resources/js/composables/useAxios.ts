@@ -25,14 +25,14 @@ export function useAxios<T = any>(config: AxiosRequestConfig) {
     const loading = ref<boolean>(false);
     const abortController = ref<AbortController | null>(null);
 
-    const execute = async () => {
+    const execute = async (configObj: AxiosRequestConfig) => {
         loading.value = true;
         error.value = null;
         abortController.value = new AbortController();
         config.signal = abortController.value.signal;
 
         try {
-            const response = await axiosInstance.request<T>(config);
+            const response = await axiosInstance.request<T>({ ...config, ...configObj });
             data.value = response.data;
         } catch (err) {
             error.value = (err as AxiosError).message || 'Unknown error';

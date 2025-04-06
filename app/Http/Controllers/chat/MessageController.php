@@ -10,11 +10,14 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller {
     public function index(Request $request) {
-        if (! $request->has('room')) return [];
+        if (! $request->has('room')) return (object) [];
         $slug = $request->room;
         $room = Room::where('slug', $slug)->first();
         return MessageResource::collection(
-            $room->messages()->with(['user'])->paginate(10)
+            $room->messages()
+                ->with(['user'])
+                ->latest()
+                ->paginate(10)
         );
     }
 

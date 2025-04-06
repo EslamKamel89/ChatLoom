@@ -32,8 +32,8 @@ export interface Message {
 
 export interface Pagination<T> {
     data: T[];
-    links: Links;
-    meta: Meta;
+    links: Links | null | undefined;
+    meta: Meta | null | undefined;
 }
 
 export interface Links {
