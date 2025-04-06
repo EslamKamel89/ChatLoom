@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\chat\MessageController;
 use App\Http\Controllers\chat\RoomController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,6 +18,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('chat')->group(function () {
         Route::resource('rooms', RoomController::class)
             ->only(['show', 'index']);
+        Route::resource('messages', MessageController::class)
+            ->only(['index']);
     });
 });
 require __DIR__ . '/settings.php';

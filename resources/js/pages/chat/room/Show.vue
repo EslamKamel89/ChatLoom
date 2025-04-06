@@ -7,13 +7,16 @@ import { Room } from '@/types/app';
 import pr from '@/utils/pr';
 import { Head } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
 }>();
 const { messages, page } = storeToRefs(useMessagesStore());
-pr(messages.value, 'Messages in Show.vue');
+onMounted(() => {
+    messages.value = [];
+});
 </script>
 
 <template>
