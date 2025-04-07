@@ -21,6 +21,7 @@ const user = useAuth();
 onMounted(async () => {
     resetMessages();
     await fetchMessages(props.room);
+    window.scrollTo(0, document.body.scrollHeight);
 });
 </script>
 
