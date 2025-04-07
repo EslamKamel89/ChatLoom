@@ -8,21 +8,22 @@ import { Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
 import pr from '@/utils/pr';
 import { Head, usePage } from '@inertiajs/vue3';
-import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
 }>();
-const { messages, page: pageNum } = storeToRefs(useMessagesStore());
-const { fetchMessages, resetMessages } = useMessagesStore();
+const messageStore = useMessagesStore();
 const page = usePage();
 const user = useAuth();
-const inersection = useIntersection();
 onMounted(async () => {
-    resetMessages();
-    await fetchMessages(props.room);
+    messageStore.resetMessages();
+    await messageStore.fetchMessages(props.room);
     window.scrollTo(0, document.body.scrollHeight);
+});
+const intersection = useIntersection();
+watch(intersection.targetIsVisible, async () => {
+    await messageStore.fetchMessages(props.room);
 });
 </script>
 
@@ -38,7 +39,7 @@ onMounted(async () => {
                     <div class="container flex flex-col-reverse h-full px-4 py-24 mx-auto space-y-6 overflow-y-auto lg:p-8 lg:pb-28 xl:max-w-7xl">
                         <!-- Messages Received -->
                         <div
-                            v-for="message in messages"
+                            v-for="message in messageStore.messages"
                             :key="message.id"
                             class="flex flex-col w-5/6 gap-2 lg:w-2/3 xl:w-1/3"
                             :class="{
@@ -68,7 +69,7 @@ onMounted(async () => {
                         </div>
 
                         <!-- END  Messages Received -->
-
+                        <div class="w-3 h-16" ref="target"></div>
                         <!-- Messages Sent -->
                         <!--
                      <div class="flex flex-col items-end w-5/6 gap-2 ms-auto lg:w-2/3 xl:w-1/3">

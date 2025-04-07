@@ -1,6 +1,5 @@
 import { useAxios } from '@/composables/useAxios';
 import { Message, Pagination, Room } from '@/types/app';
-import pr from '@/utils/pr';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -25,7 +24,6 @@ export default defineStore('messages', () => {
             if (page.value == data.value?.meta?.last_page) {
                 hasNextPage.value = false;
             }
-            pr(messages.value, 'messages');
         }
     };
     return {
