@@ -4,8 +4,9 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
 import { Room } from '@/types/app';
+import useAuth from '@/types/useAuth';
 import pr from '@/utils/pr';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 
@@ -13,8 +14,10 @@ const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
 }>();
-const { messages, page } = storeToRefs(useMessagesStore());
+const { messages, page: pageNum } = storeToRefs(useMessagesStore());
 const { fetchMessages, resetMessages } = useMessagesStore();
+const page = usePage();
+const user = useAuth();
 onMounted(async () => {
     resetMessages();
     await fetchMessages(props.room);
@@ -25,29 +28,54 @@ onMounted(async () => {
     <Head :title="props.room.title" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="relative flex h-screen w-full flex-col">
+        <div class="relative flex flex-col w-full h-screen">
             <!-- Page Container -->
-            <div i class="h-screen w-full">
+            <div i class="w-full h-screen">
                 <!-- Page Content -->
                 <main id="page-content" class="w-full">
-                    <div class="container mx-auto flex h-full flex-col space-y-6 overflow-y-auto px-4 py-24 lg:p-8 lg:pb-28 xl:max-w-7xl">
+                    <div class="container flex flex-col-reverse h-full px-4 py-24 mx-auto space-y-6 overflow-y-auto lg:p-8 lg:pb-28 xl:max-w-7xl">
                         <!-- Messages Received -->
-                        <div class="flex w-5/6 flex-col items-start gap-2 lg:w-2/3 xl:w-1/3">
-                            <p class="text-sm font-medium text-slate-500">Sender's Name</p>
-                            <div class="rounded-2xl rounded-br-none bg-gray-100 px-5 py-3">
-                                <p class="font-semibold text-slate-600">Message Content</p>
+                        <div
+                            v-for="message in messages"
+                            :key="message.id"
+                            class="flex flex-col w-5/6 gap-2 lg:w-2/3 xl:w-1/3"
+                            :class="{
+                                'me-auto items-start': user.id != message.user_id,
+                                'ms-auto items-end': user.id == message.user_id,
+                            }"
+                        >
+                            <p class="text-sm font-medium text-slate-500" v-if="user.id != message.user_id">{{ message.user.name }}</p>
+                            <div
+                                class="px-5 py-3 rounded-br-none rounded-2xl"
+                                :class="{
+                                    'bg-indigo-600': user.id == message.user_id,
+                                    'bg-gray-100': user.id != message.user_id,
+                                }"
+                            >
+                                <p
+                                    class="font-semibold"
+                                    :class="{
+                                        'text-white': user.id == message.user_id,
+                                        'text-slate-600': user.id != message.user_id,
+                                    }"
+                                >
+                                    {{ message.content }}
+                                </p>
                             </div>
-                            <p class="text-xs font-medium text-slate-500">16:25 am</p>
+                            <p class="text-xs font-medium text-slate-500">{{ message.created_at.friendly }}</p>
                         </div>
+
                         <!-- END  Messages Received -->
 
                         <!-- Messages Sent -->
-                        <div class="ms-auto flex w-5/6 flex-col items-end gap-2 lg:w-2/3 xl:w-1/3">
-                            <div class="rounded-2xl rounded-tl-none bg-indigo-600 px-5 py-3">
+                        <!--
+                     <div class="flex flex-col items-end w-5/6 gap-2 ms-auto lg:w-2/3 xl:w-1/3">
+                            <div class="px-5 py-3 bg-indigo-600 rounded-tl-none rounded-2xl">
                                 <p class="font-semibold text-white">Message Content</p>
                             </div>
-                            <p class="text-right text-xs font-medium text-slate-500">16:25 am</p>
+                            <p class="text-xs font-medium text-right text-slate-500">16:25 am</p>
                         </div>
+                    -->
                         <!-- END Messages Sent -->
                     </div>
                 </main>
