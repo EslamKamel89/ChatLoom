@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ChatFooter from '@/components/chat/ChatFooter.vue';
+import useIntersection from '@/composables/useIntersection';
 import AppLayout from '@/layouts/AppLayout.vue';
 import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
@@ -9,7 +10,6 @@ import pr from '@/utils/pr';
 import { Head, usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
-
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
@@ -18,6 +18,7 @@ const { messages, page: pageNum } = storeToRefs(useMessagesStore());
 const { fetchMessages, resetMessages } = useMessagesStore();
 const page = usePage();
 const user = useAuth();
+const inersection = useIntersection();
 onMounted(async () => {
     resetMessages();
     await fetchMessages(props.room);
