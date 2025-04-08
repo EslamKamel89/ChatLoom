@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ChatFooter from '@/components/chat/ChatFooter.vue';
-import Spinner from '@/components/common/spinner.vue';
+import Spinner from '@/components/common/Spinner.vue';
 import useIntersection from '@/composables/useIntersection';
 import AppLayout from '@/layouts/AppLayout.vue';
 import useMessagesStore from '@/stores/useMessagesStore';
