@@ -24,9 +24,11 @@ onMounted(async () => {
 });
 const { target, targetIsVisible } = useIntersection();
 const listContainer = ref<HTMLElement | null>(null);
-const scrollTop = 0;
 watch(targetIsVisible, async () => {
-    await messageStore.fetchMessages(props.room);
+    if (targetIsVisible.value) {
+        await messageStore.fetchMessages(props.room);
+        window.scrollTo(0, 1200);
+    }
 });
 </script>
 
@@ -76,7 +78,7 @@ watch(targetIsVisible, async () => {
                         </div>
                         <!-- END  Messages Received -->
                         <div v-if="messageStore.messages.length">
-                            <div class="h-8 w-3" ref="target"></div>
+                            <div class="h-8 w-3 translate-y-20" ref="target"></div>
                         </div>
                         <!-- Messages Sent -->
                         <!--
