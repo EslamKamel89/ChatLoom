@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\chat;
 
+use App\Events\MessageCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageStoreRequest;
 use App\Http\Resources\MessageResource;
@@ -29,6 +30,7 @@ class MessageController extends Controller {
             'room_id' => $room->id,
             'content' => $request->content,
         ]);
+        broadcast(new MessageCreatedEvent($message))->toOthers();
         return MessageResource::make($message->load(['user']));
     }
 
