@@ -2,13 +2,16 @@
 import ChatFooter from '@/components/chat/ChatFooter.vue';
 import Spinner from '@/components/common/Spinner.vue';
 import useIntersection from '@/composables/useIntersection';
+import echo from '@/echo';
 import AppLayout from '@/layouts/AppLayout.vue';
 import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
 import { Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
+import pr from '@/utils/pr';
 import { Head, usePage } from '@inertiajs/vue3';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
+
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
@@ -16,14 +19,7 @@ const props = defineProps<{
 const messageStore = useMessagesStore();
 const page = usePage();
 const user = useAuth();
-onMounted(async () => {
-    messageStore.resetMessages();
-    await messageStore.fetchMessages(props.room);
-    window.scrollTo(0, document.body.scrollHeight);
-});
-onUnmounted(() => {
-    messageStore.resetMessages();
-});
+
 const { target, targetIsVisible } = useIntersection();
 const listContainer = ref<HTMLElement | null>(null);
 watch(targetIsVisible, async () => {
@@ -31,6 +27,19 @@ watch(targetIsVisible, async () => {
         await messageStore.fetchMessages(props.room);
         window.scrollTo(0, 1200);
     }
+});
+// const channel = echo.channel(`room.${props.room.id}`);
+const channel = echo.channel(`rooms`);
+channel.listen('MessageCreatedEvent', (e: unknown) => {
+    pr(e, 'Event recieved from the websocket');
+});
+onMounted(async () => {
+    messageStore.resetMessages();
+    await messageStore.fetchMessages(props.room);
+    window.scrollTo(0, document.body.scrollHeight);
+});
+onUnmounted(() => {
+    messageStore.resetMessages();
 });
 </script>
 

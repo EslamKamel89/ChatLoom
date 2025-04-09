@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Helpers\pr;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
@@ -20,11 +21,11 @@ class MessageCreatedEvent implements ShouldBroadcastNow {
      * Create a new event instance.
      */
     public function __construct(protected Message $message) {
-        //
     }
 
     public function broadcastWith() {
-        return MessageResource::make($this->message);
+        return MessageResource::make($this->message)
+            ->toArray(request());
     }
 
     /**
@@ -34,7 +35,9 @@ class MessageCreatedEvent implements ShouldBroadcastNow {
      */
     public function broadcastOn(): array {
         return [
-            new PresenceChannel("room.{$this->message->room->id}"),
+            new PresenceChannel("rooms"),
+
+            // new PresenceChannel("room.{$this->message->room->id}"),
         ];
     }
 }

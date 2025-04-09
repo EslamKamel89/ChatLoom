@@ -2,7 +2,6 @@ import { useAxios } from '@/composables/useAxios';
 import { Message, Pagination, Room } from '@/types/app';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-
 export default defineStore('messages', () => {
     const page = ref(0);
     const room = ref<Room | null>(null);
@@ -38,6 +37,7 @@ export default defineStore('messages', () => {
         await execute();
         if (data.value) messages.value = [data.value, ...messages.value];
     };
+
     return {
         page,
         messages,

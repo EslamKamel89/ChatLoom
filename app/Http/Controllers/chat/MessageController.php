@@ -30,8 +30,9 @@ class MessageController extends Controller {
             'room_id' => $room->id,
             'content' => $request->content,
         ]);
-        broadcast(new MessageCreatedEvent($message))->toOthers();
-        return MessageResource::make($message->load(['user']));
+        $message->load(['user']);
+        broadcast(new MessageCreatedEvent($message));
+        return MessageResource::make($message);
     }
 
     // public function create() {
