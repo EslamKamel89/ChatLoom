@@ -26,7 +26,18 @@ export default defineStore('messages', () => {
             }
         }
     };
-    const storeMessage = async (content: string) => {};
+    const storeMessage = async (content: string) => {
+        const { data, execute } = useAxios<Message>({
+            baseURL: route('messages.store'),
+            method: 'POST',
+            data: {
+                slug: room.value?.slug,
+                content,
+            },
+        });
+        await execute();
+        if (data.value) messages.value = [data.value, ...messages.value];
+    };
     return {
         page,
         messages,

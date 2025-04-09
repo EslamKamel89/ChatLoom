@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\chat;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MessageStoreRequest;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\Room;
@@ -21,7 +22,14 @@ class MessageController extends Controller {
         );
     }
 
-    public function store(Request $request) {
+    public function store(MessageStoreRequest $request) {
+        $room = Room::where('slug', $request->slug)->firstOrFail();
+        $message = Message::create([
+            'user_id' => auth()->id(),
+            'room_id' => $room->id,
+            'content' => $request->content,
+        ]);
+        return MessageResource::make($message->load(['user']));
     }
 
     // public function create() {

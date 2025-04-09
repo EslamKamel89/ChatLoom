@@ -25,7 +25,7 @@ export function useAxios<T = any>(config: AxiosRequestConfig) {
     const loading = ref<boolean>(false);
     const abortController = ref<AbortController | null>(null);
 
-    const execute = async (configObj: AxiosRequestConfig) => {
+    const execute = async (configObj: AxiosRequestConfig = {}) => {
         loading.value = true;
         error.value = null;
         abortController.value = new AbortController();

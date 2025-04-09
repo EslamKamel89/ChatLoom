@@ -7,14 +7,15 @@ const message = ref('');
 const shift = ref(false);
 const { open } = useSidebar();
 const { storeMessage } = useMessagesStore();
-const handleEnter = () => {
+const handleEnter = async () => {
     if (message.value.trim() == '') return;
     if (shift.value) {
         message.value = `${message.value}\n`;
         return;
     }
-    storeMessage(message.value);
+    await storeMessage(message.value);
     message.value = '';
+    window.scrollTo(0, document.body.scrollHeight);
 };
 </script>
 <template>

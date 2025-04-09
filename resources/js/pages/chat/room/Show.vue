@@ -43,7 +43,9 @@ watch(targetIsVisible, async () => {
             <div i class="h-screen w-full">
                 <!-- Page Content -->
                 <main id="page-content" class="w-full">
-                    <div class="container mx-auto flex h-full flex-col-reverse space-y-6 overflow-y-auto px-4 py-24 lg:p-8 lg:pb-28 xl:max-w-7xl">
+                    <div
+                        class="container mx-auto flex h-full flex-col-reverse space-y-6 space-y-reverse overflow-y-auto px-4 py-24 lg:p-8 lg:pb-28 xl:max-w-7xl"
+                    >
                         <!-- Messages Received -->
 
                         <div
