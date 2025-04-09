@@ -1,22 +1,21 @@
 <script setup lang="ts">
+import useMessagesStore from '@/stores/useMessagesStore';
 import { ref } from 'vue';
 import { useSidebar } from '../ui/sidebar';
 
 const message = ref('');
 const shift = ref(false);
+const { open } = useSidebar();
+const { storeMessage } = useMessagesStore();
 const handleEnter = () => {
     if (message.value.trim() == '') return;
     if (shift.value) {
         message.value = `${message.value}\n`;
         return;
     }
-    emit('valid', message.value);
+    storeMessage(message.value);
     message.value = '';
 };
-const emit = defineEmits<{
-    valid: [message: string];
-}>();
-const { open } = useSidebar();
 </script>
 <template>
     <!-- Page Footer -->

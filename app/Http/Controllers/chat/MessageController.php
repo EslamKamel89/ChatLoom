@@ -21,10 +21,10 @@ class MessageController extends Controller {
         );
     }
 
-    // public function create() {
-    // }
+    public function store(Request $request) {
+    }
 
-    // public function store(Request $request) {
+    // public function create() {
     // }
 
     // public function show(Message $message) {

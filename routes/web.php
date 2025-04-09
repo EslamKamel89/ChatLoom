@@ -19,7 +19,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('rooms', RoomController::class)
             ->only(['show', 'index']);
         Route::resource('messages', MessageController::class)
-            ->only(['index']);
+            ->only(['index', 'store']);
     });
 });
 require __DIR__ . '/settings.php';

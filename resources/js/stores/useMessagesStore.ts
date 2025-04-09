@@ -26,6 +26,7 @@ export default defineStore('messages', () => {
             }
         }
     };
+    const storeMessage = async (content: string) => {};
     return {
         page,
         messages,
@@ -35,5 +36,6 @@ export default defineStore('messages', () => {
         fetchMessages,
         resetMessages,
         hasNextPage,
+        storeMessage,
     };
 });

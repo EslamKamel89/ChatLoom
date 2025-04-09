@@ -7,9 +7,8 @@ import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
 import { Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
-import pr from '@/utils/pr';
 import { Head, usePage } from '@inertiajs/vue3';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
     room: Room;
@@ -21,6 +20,9 @@ onMounted(async () => {
     messageStore.resetMessages();
     await messageStore.fetchMessages(props.room);
     window.scrollTo(0, document.body.scrollHeight);
+});
+onUnmounted(() => {
+    messageStore.resetMessages();
 });
 const { target, targetIsVisible } = useIntersection();
 const listContainer = ref<HTMLElement | null>(null);
@@ -94,7 +96,7 @@ watch(targetIsVisible, async () => {
                 </main>
                 <!-- END Page Content -->
 
-                <ChatFooter v-on:valid="(message) => pr(message, 'Message recieved in Show.vue')" />
+                <ChatFooter />
             </div>
             <!-- END Page Container -->
         </div>
