@@ -6,11 +6,10 @@ import echo from '@/echo';
 import AppLayout from '@/layouts/AppLayout.vue';
 import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
-import { Room } from '@/types/app';
+import { Message, Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
-import pr from '@/utils/pr';
 import { Head, usePage } from '@inertiajs/vue3';
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [];
 const props = defineProps<{
@@ -28,10 +27,12 @@ watch(targetIsVisible, async () => {
         window.scrollTo(0, 1200);
     }
 });
-const channel = echo.channel(`room.${props.room.id}`);
+const channel = echo.join(`room.${props.room.id}`);
 // const channel = echo.channel(`rooms`);
-channel.listen('MessageCreatedEvent', (e: unknown) => {
-    pr(e, 'Event recieved from the websocket witout a dout');
+channel.listen('MessageCreatedEvent', async (message: Message) => {
+    messageStore.addMessageFromWebSocket(message);
+    await nextTick();
+    window.scrollTo(0, document.body.scrollHeight);
 });
 
 onMounted(async () => {

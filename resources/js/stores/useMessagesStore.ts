@@ -1,5 +1,6 @@
 import { useAxios } from '@/composables/useAxios';
 import { Message, Pagination, Room } from '@/types/app';
+import useAuth from '@/types/useAuth';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 export default defineStore('messages', () => {
@@ -39,6 +40,12 @@ export default defineStore('messages', () => {
         await execute();
         if (data.value) messages.value = [data.value, ...messages.value];
     };
+    const addMessageFromWebSocket = (message: Message) => {
+        const user = useAuth();
+
+        if (user.value.id == message.user_id || message.room_id != room.value?.id) return;
+        messages.value = [message, ...messages.value];
+    };
 
     return {
         page,
@@ -50,5 +57,6 @@ export default defineStore('messages', () => {
         resetMessages,
         hasNextPage,
         storeMessage,
+        addMessageFromWebSocket,
     };
 });
