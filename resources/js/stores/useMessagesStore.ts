@@ -39,12 +39,14 @@ export default defineStore('messages', () => {
         });
         await execute();
         if (data.value) messages.value = [data.value, ...messages.value];
+        messages.value.pop();
     };
     const addMessageFromWebSocket = (message: Message) => {
         const user = useAuth();
 
         if (user.value.id == message.user_id || message.room_id != room.value?.id) return;
         messages.value = [message, ...messages.value];
+        messages.value.pop();
     };
 
     return {
