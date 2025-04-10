@@ -28,11 +28,12 @@ watch(targetIsVisible, async () => {
         window.scrollTo(0, 1200);
     }
 });
-// const channel = echo.channel(`room.${props.room.id}`);
-const channel = echo.channel(`rooms`);
+const channel = echo.channel(`room.${props.room.id}`);
+// const channel = echo.channel(`rooms`);
 channel.listen('MessageCreatedEvent', (e: unknown) => {
-    pr(e, 'Event recieved from the websocket');
+    pr(e, 'Event recieved from the websocket witout a dout');
 });
+
 onMounted(async () => {
     messageStore.resetMessages();
     await messageStore.fetchMessages(props.room);

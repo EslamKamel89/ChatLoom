@@ -12,6 +12,8 @@ export default defineStore('messages', () => {
     });
     const resetMessages = () => {
         messages.value = [];
+        page.value = 0;
+        hasNextPage.value = true;
     };
     const fetchMessages = async (choosenRoom: Room) => {
         if (!hasNextPage.value) return;

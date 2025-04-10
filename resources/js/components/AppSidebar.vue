@@ -23,6 +23,7 @@ const mainNavItems = computed(() => [
         return {
             title: room.title,
             href: route('rooms.show', room.slug),
+
             // icon: LayoutGrid,
         };
     }) || []),

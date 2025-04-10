@@ -35,9 +35,7 @@ class MessageCreatedEvent implements ShouldBroadcastNow {
      */
     public function broadcastOn(): array {
         return [
-            new PresenceChannel("rooms"),
-
-            // new PresenceChannel("room.{$this->message->room->id}"),
+            new PresenceChannel("room.{$this->message->room_id}"),
         ];
     }
 }

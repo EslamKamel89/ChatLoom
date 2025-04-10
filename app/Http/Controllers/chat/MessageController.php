@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\chat;
 
 use App\Events\MessageCreatedEvent;
+use App\Helpers\pr;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageStoreRequest;
 use App\Http\Resources\MessageResource;
@@ -15,11 +16,13 @@ class MessageController extends Controller {
         if (! $request->has('room')) return (object) [];
         $slug = $request->room;
         $room = Room::where('slug', $slug)->first();
-        return MessageResource::collection(
-            $room->messages()
-                ->with(['user'])
-                ->latest()
-                ->paginate(10)
+        return pr::log(
+            MessageResource::collection(
+                $room->messages()
+                    ->with(['user'])
+                    ->latest()
+                    ->paginate(10)
+            )
         );
     }
 
@@ -31,7 +34,7 @@ class MessageController extends Controller {
             'content' => $request->content,
         ]);
         $message->load(['user']);
-        broadcast(new MessageCreatedEvent($message));
+        broadcast(new MessageCreatedEvent($message))->toOthers();
         return MessageResource::make($message);
     }
 
