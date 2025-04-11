@@ -15,10 +15,7 @@ class RoomController extends Controller {
         return  RoomResource::collection(
             Room::with(['users'])
                 ->get()
-                ->map(function (Room $room) {
-                    $room->users = $room->users->unique();
-                    return $room;
-                },)
+                ->map(fn($room) => $room->uniqueUsers())
         );
     }
 

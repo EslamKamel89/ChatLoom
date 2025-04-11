@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -50,5 +51,9 @@ class Room extends Model {
             'room_id',
             'user_id',
         )->withTimestamps()->withPivot('content');
+    }
+    public function uniqueUsers(): static {
+        $this->users = $this->users->unique();
+        return $this;
     }
 }
