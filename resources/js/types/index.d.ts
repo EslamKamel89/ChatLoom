@@ -11,11 +11,12 @@ export interface BreadcrumbItem {
     href: string;
 }
 
-export interface NavItem {
+export interface NavItem<T> {
     title: string;
     href: string;
     icon?: LucideIcon;
     isActive?: boolean;
+    subItems?: T[];
 }
 
 export interface SharedData extends PageProps {

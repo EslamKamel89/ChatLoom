@@ -4,7 +4,7 @@ import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import useRoomsIndex from '@/composables/useRoomsIndex';
-import { type NavItem } from '@/types';
+import { User, type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
 import AppLogo from './AppLogo.vue';
@@ -13,7 +13,7 @@ onMounted(() => {
     if (rooms?.value?.length && rooms?.value?.length > 0) return;
     execute();
 });
-const mainNavItems = computed(() => [
+const mainNavItems = computed<NavItem<User>[]>(() => [
     // {
     //     title: 'Dashboard',
     //     href: '/dashboard',
@@ -23,13 +23,13 @@ const mainNavItems = computed(() => [
         return {
             title: room.title,
             href: route('rooms.show', room.slug),
-
+            subItems: room.users,
             // icon: LayoutGrid,
         };
     }) || []),
 ]);
 
-const footerNavItems: NavItem[] = [
+const footerNavItems: NavItem<null>[] = [
     // {
     //     title: 'Github Repo',
     //     href: 'https://github.com/laravel/vue-starter-kit',
