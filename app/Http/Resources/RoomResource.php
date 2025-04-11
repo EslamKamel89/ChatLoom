@@ -16,7 +16,8 @@ class RoomResource extends JsonResource {
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'created_at' => DateTimeResource::make($this->created_at)
+            'created_at' => DateTimeResource::make($this->created_at),
+            'users' => UserResource::collection($this->whenLoaded('users')),
         ];
     }
 }

@@ -16,14 +16,13 @@ class MessageController extends Controller {
         if (! $request->has('room')) return (object) [];
         $slug = $request->room;
         $room = Room::where('slug', $slug)->first();
-        return pr::log(
+        return
             MessageResource::collection(
                 $room->messages()
                     ->with(['user'])
                     ->latest()
                     ->paginate(10)
-            )
-        );
+            );
     }
 
     public function store(MessageStoreRequest $request) {

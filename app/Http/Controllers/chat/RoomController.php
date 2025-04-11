@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers\chat;
 
+use App\Helpers\pr;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoomResource;
 use App\Models\Room;
+use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller {
     public function index() {
-        return RoomResource::collection(
-            Room::all(),
+        return  RoomResource::collection(
+            Room::with(['users'])
+                ->get()
+                ->map(function (Room $room) {
+                    $room->users = $room->users->unique();
+                    return $room;
+                },)
         );
     }
 

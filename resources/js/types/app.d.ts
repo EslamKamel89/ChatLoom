@@ -3,6 +3,7 @@ export interface Room {
     title: string;
     slug: string;
     created_at: DateTimeType;
+    users: User[];
 }
 
 export interface DateTimeType {
