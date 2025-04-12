@@ -8,6 +8,7 @@ import useMessagesStore from '@/stores/useMessagesStore';
 import { type BreadcrumbItem } from '@/types';
 import { Message, Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
+import pr from '@/utils/pr';
 import { Head, usePage } from '@inertiajs/vue3';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
@@ -29,11 +30,24 @@ watch(targetIsVisible, async () => {
 });
 const channel = echo.join(`room.${props.room.id}`);
 // const channel = echo.channel(`rooms`);
-channel.listen('MessageCreatedEvent', async (message: Message) => {
-    messageStore.addMessageFromWebSocket(message);
-    await nextTick();
-    window.scrollTo(0, document.body.scrollHeight);
-});
+channel
+    .listen('MessageCreatedEvent', async (message: Message) => {
+        messageStore.addMessageFromWebSocket(message);
+        await nextTick();
+        window.scrollTo(0, document.body.scrollHeight);
+    })
+    .here((users: { id: number; name: string }[]) => {
+        pr(users, `here callback room.${props.room.id}`);
+    })
+    .joining((user: { id: number; name: string }) => {
+        pr(user, `joining callback room.${props.room.id}`);
+    })
+    .leaving((user: { id: number; name: string }) => {
+        pr(user, `leaving callback room.${props.room.id}`);
+    })
+    .error((error: unknown) => {
+        pr(error, `error callback room.${props.room.id}`);
+    });
 
 onMounted(async () => {
     messageStore.resetMessages();
