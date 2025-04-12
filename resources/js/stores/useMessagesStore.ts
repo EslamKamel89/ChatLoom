@@ -1,8 +1,10 @@
 import { useAxios } from '@/composables/useAxios';
+import echo from '@/echo';
 import { Message, Pagination, Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
+import pr from '@/utils/pr';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 export default defineStore('messages', () => {
     const page = ref(0);
     const room = ref<Room | null>(null);
@@ -48,7 +50,27 @@ export default defineStore('messages', () => {
         messages.value = [message, ...messages.value];
         messages.value.pop();
     };
-
+    const joinChannel = (room: Room) => {
+        const channel = echo.join(`room.${room.id}`);
+        channel
+            .listen('MessageCreatedEvent', async (message: Message) => {
+                addMessageFromWebSocket(message);
+                await nextTick();
+                window.scrollTo(0, document.body.scrollHeight);
+            })
+            .here((users: { id: number; name: string }[]) => {
+                pr(users, `here callback room.${room.id}`);
+            })
+            .joining((user: { id: number; name: string }) => {
+                pr(user, `joining callback room.${room.id}`);
+            })
+            .leaving((user: { id: number; name: string }) => {
+                pr(user, `leaving callback room.${room.id}`);
+            })
+            .error((error: unknown) => {
+                pr(error, `error callback room.${room.id}`);
+            });
+    };
     return {
         page,
         messages,
@@ -60,5 +82,6 @@ export default defineStore('messages', () => {
         hasNextPage,
         storeMessage,
         addMessageFromWebSocket,
+        joinChannel,
     };
 });
