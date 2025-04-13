@@ -6,6 +6,7 @@ import useAuth from '@/types/useAuth';
 import pr from '@/utils/pr';
 import { defineStore } from 'pinia';
 import { nextTick, ref } from 'vue';
+// import {PusherPresenceChannel} from 'laravel-echo';
 export default defineStore('messages', () => {
     const page = ref(0);
     const room = ref<Room | null>(null);
@@ -60,6 +61,7 @@ export default defineStore('messages', () => {
                 await nextTick();
                 window.scrollTo(0, document.body.scrollHeight);
             })
+
             .here((users: { id: number; name: string }[]) => {
                 pr(users, `here callback room.${room.id}`);
                 roomStatus.syncRoomStatus({
@@ -79,6 +81,7 @@ export default defineStore('messages', () => {
                 pr(error, `error callback room.${room.id}`);
             });
     };
+
     return {
         page,
         messages,
