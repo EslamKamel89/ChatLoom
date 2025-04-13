@@ -1,5 +1,6 @@
 import { useAxios } from '@/composables/useAxios';
 import echo from '@/echo';
+import useRoomStatusStore from '@/stores/useRoomsStatusStore';
 import { Message, Pagination, Room } from '@/types/app';
 import useAuth from '@/types/useAuth';
 import pr from '@/utils/pr';
@@ -10,6 +11,7 @@ export default defineStore('messages', () => {
     const room = ref<Room | null>(null);
     const messages = ref<Message[]>([]);
     const hasNextPage = ref(true);
+    const roomStatus = useRoomStatusStore();
     const { data, error, loading, execute } = useAxios<Pagination<Message>>({
         baseURL: route('messages.index'),
     });
@@ -60,12 +62,18 @@ export default defineStore('messages', () => {
             })
             .here((users: { id: number; name: string }[]) => {
                 pr(users, `here callback room.${room.id}`);
+                roomStatus.syncRoomStatus({
+                    roomId: room.id,
+                    users: users.map((u) => ({ id: u.id, active: true })),
+                });
             })
             .joining((user: { id: number; name: string }) => {
                 pr(user, `joining callback room.${room.id}`);
+                roomStatus.changeRoomStatus(room.id, user.id, true);
             })
             .leaving((user: { id: number; name: string }) => {
                 pr(user, `leaving callback room.${room.id}`);
+                roomStatus.changeRoomStatus(room.id, user.id, false);
             })
             .error((error: unknown) => {
                 pr(error, `error callback room.${room.id}`);
