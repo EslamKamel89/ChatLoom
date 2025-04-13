@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import useRoomsStatusStore from '@/stores/useRoomsStatusStore';
 import { User, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
+import { storeToRefs } from 'pinia';
+import SubNavItem from './SubNavItem.vue';
 
 const props = defineProps<{
-    items: NavItem<User>[];
+    items: (NavItem<User> & { roomId: number })[];
 }>();
 
 const page = usePage<SharedData>();
 const isActive = (item: NavItem<User>): boolean => {
     return item.href.includes(page.url);
 };
+const { roomsStatus } = storeToRefs(useRoomsStatusStore());
 </script>
 
 <template>
@@ -25,10 +29,7 @@ const isActive = (item: NavItem<User>): boolean => {
                     </Link>
                     <div class="ml-4" v-if="item.subItems && isActive(item)">
                         <div v-for="user in item.subItems" :key="user.id">
-                            <div class="mb-2 rounded-lg border px-2 py-1 text-xs font-thin">
-                                <div>{{ user.name }}</div>
-                                <div>{{ user.email }}</div>
-                            </div>
+                            <SubNavItem :user="user" :room-id="item.roomId" />
                         </div>
                     </div>
                 </SidebarMenuButton>

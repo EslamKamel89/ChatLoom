@@ -13,7 +13,7 @@ onMounted(() => {
     if (rooms?.value?.length && rooms?.value?.length > 0) return;
     execute();
 });
-const mainNavItems = computed<NavItem<User>[]>(() => [
+const mainNavItems = computed<(NavItem<User> & { roomId: number })[]>(() => [
     // {
     //     title: 'Dashboard',
     //     href: '/dashboard',
@@ -24,6 +24,7 @@ const mainNavItems = computed<NavItem<User>[]>(() => [
             title: room.title,
             href: route('rooms.show', room.slug),
             subItems: room.users,
+            roomId: room.id,
             // icon: LayoutGrid,
         };
     }) || []),
